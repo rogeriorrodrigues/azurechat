@@ -130,13 +130,13 @@ export const SoftDeleteChatThreadForCurrentUser = async (
       }
       const chats = chatResponse.response;
 
-      chats.forEach(async (chat) => {
+      for (const chat of chats) {
         const itemToUpdate = {
           ...chat,
         };
         itemToUpdate.isDeleted = true;
         await HistoryContainer().items.upsert(itemToUpdate);
-      });
+      }
 
       const chatDocumentsResponse = await FindAllChatDocuments(chatThreadID);
 
@@ -150,13 +150,13 @@ export const SoftDeleteChatThreadForCurrentUser = async (
         await DeleteDocuments(chatThreadID);
       }
 
-      chatDocuments.forEach(async (chatDocument: ChatDocumentModel) => {
+      for (const chatDocument of chatDocuments) {
         const itemToUpdate = {
           ...chatDocument,
         };
         itemToUpdate.isDeleted = true;
         await HistoryContainer().items.upsert(itemToUpdate);
-      });
+      }
 
       chatThreadResponse.response.isDeleted = true;
       await HistoryContainer().items.upsert(chatThreadResponse.response);
